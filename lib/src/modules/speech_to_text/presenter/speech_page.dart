@@ -1,4 +1,7 @@
+import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
+import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -15,11 +18,13 @@ class _SpeechPageState extends State<SpeechPage> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _speechEnabled = false;
+  late final SpeechCubit cubit;
   String _lastWords = '';
 
   @override
   void initState() {
     super.initState();
+    cubit = BlocProvider.of<SpeechCubit>(context);
     _initSpeech();
   }
 
@@ -71,6 +76,15 @@ class _SpeechPageState extends State<SpeechPage> {
       ),
       body: Stack(
         children: [
+          BlocBuilder<SpeechCubit, SpeechState>(
+              bloc: cubit,
+              builder: (context, state) {
+                return switch (state) {
+                  InitialSpeechState() => Container(),
+                  RecordingSpeechState() => Container(),
+                  ErrorSpeechState() => Container(),
+                };
+              }),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
