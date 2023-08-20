@@ -1,4 +1,4 @@
-import 'package:app_hospital/src/modules/speech_to_text/speech_page.dart';
+import 'package:app_hospital/src/modules/speech_to_text/presenter/speech_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SpeechModule extends Module {
@@ -7,6 +7,6 @@ class SpeechModule extends Module {
 
   @override
   void routes(r) {
-    r.child('/', child: (context) => const SpeechPage());
+    r.child('/', child: (context) => SpeechPage());
   }
 }
