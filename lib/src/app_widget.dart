@@ -8,11 +8,13 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'My Smart App',
       themeMode: ThemeMode.light,
       theme: lightTheme,
       darkTheme: darkTheme,
       routerDelegate: Modular.routerDelegate,
+      routeInformationParser: Modular.routeInformationParser,
     ); //added by extension
   }
 }
