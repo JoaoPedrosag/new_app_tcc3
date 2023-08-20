@@ -1,3 +1,4 @@
+import 'package:app_hospital/src/modules/speech_to_text/presenter/components/list_tile_custom.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _SpeechPageState extends State<SpeechPage> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     if (result.finalResult) {
       setState(() {
-        _textEditingController.text += result.recognizedWords + " ";
+        _textEditingController.text += "${result.recognizedWords} ";
         _textEditingController.selection = TextSelection.fromPosition(
             TextPosition(offset: _textEditingController.text.length));
       });
@@ -89,18 +90,10 @@ class _SpeechPageState extends State<SpeechPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: ListTile(
-                    title: Text('Paciente: Joao da Silva'),
-                    subtitle: Text('Data da internação: 01/01/2021'),
-                    leading: ClipOval(
-                      child: Image.asset(
-                        'assets/img/user.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                const ListTileCustom(
+                  namePatient: 'João da silva',
+                  idPatient: 1,
+                  date: '01/01/2021',
                 ),
                 Expanded(
                   child: Container(
@@ -126,20 +119,19 @@ class _SpeechPageState extends State<SpeechPage> {
             ),
           ),
           Positioned(
-            left: 16, // Posição horizontal
-            bottom: 16, // Posição vertical a partir do fundo
+            left: 16,
+            bottom: 16,
             child: FloatingActionButton(
               onPressed: _clearText,
               tooltip: 'Limpar',
               child: Icon(Icons.clear),
-              backgroundColor: Colors.red, // Cor do botão
+              backgroundColor: Colors.red,
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:
-            // If not yet listening for speech start, otherwise stop
             _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',
         child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
