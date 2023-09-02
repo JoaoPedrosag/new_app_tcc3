@@ -15,6 +15,8 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   final SpeechToText speechToText = SpeechToText();
 
+  String text = 'Pressione o botão para comecar a falar a evolucao do paciente';
+
   final TextEditingController textEditingController = TextEditingController();
 
   void _initSpeech() async {
@@ -28,6 +30,11 @@ class SpeechCubit extends Cubit<SpeechState> {
   }
 
   Future<void> startListening() async {
+    if (speechToText.isListening) {
+      await speechToText.stop();
+      emit(InitialSpeechState());
+      return;
+    }
     await speechToText.listen(
       onResult: _onSpeechResult,
       pauseFor: const Duration(seconds: 20),
@@ -35,6 +42,7 @@ class SpeechCubit extends Cubit<SpeechState> {
       localeId: 'pt_BR',
       cancelOnError: true,
     );
+    text = '';
     emit(RecordingSpeechState());
   }
 
@@ -45,12 +53,18 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     if (result.finalResult) {
+      text += "${result.recognizedWords} ";
       textEditingController.text += "${result.recognizedWords} ";
       textEditingController.selection = TextSelection.fromPosition(
-          TextPosition(offset: textEditingController.text.length));
+        TextPosition(offset: textEditingController.text.length),
+      );
 
       _wordsSpeech.add(result.recognizedWords);
       emit(RecognizedSpeechState(text: result.recognizedWords));
+    } else {
+      // Atualizar 'text' mesmo quando o resultado não é final
+      text = "${result.recognizedWords} ";
+      emit(RecordingSpeechState());
     }
   }
 
