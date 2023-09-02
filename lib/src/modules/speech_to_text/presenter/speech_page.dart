@@ -1,5 +1,7 @@
-import 'dart:ui';
-
+import 'package:app_hospital/src/modules/speech_to_text/presenter/components/button_floating_action_left.dart';
+import 'package:app_hospital/src/modules/speech_to_text/presenter/components/button_floating_action_right.dart';
+import 'package:app_hospital/src/modules/speech_to_text/presenter/components/expanded_container.dart';
+import 'package:app_hospital/src/modules/speech_to_text/presenter/components/image_filter_custom.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/components/list_tile_custom.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
@@ -12,7 +14,6 @@ class SpeechPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
     final cubit = Modular.get<SpeechCubit>();
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return BlocBuilder<SpeechCubit, SpeechState>(
@@ -21,30 +22,20 @@ class SpeechPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Visibility(
-                visible: state is RecordingSpeechState,
-                replacement: const Text('Gravar evolução de paciente'),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Escutando...'),
-                  ],
-                )),
-          ),
-          floatingActionButton: AnimatedOpacity(
-            opacity: isKeyboardOpen ? 0 : 1,
-            duration: const Duration(milliseconds: 500),
-            child: FloatingActionButton(
-              backgroundColor: state is RecordingSpeechState
-                  ? Colors.green
-                  : Theme.of(context).primaryColor,
-              heroTag: null,
-              onPressed: () {
-                cubit.startListening();
-              },
-              tooltip: 'Escutando',
-              child: Icon(
-                  state is RecordingSpeechState ? Icons.mic : Icons.mic_off),
+              visible: state is RecordingSpeechState,
+              replacement: const Text('Gravar evolução de paciente'),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Escutando...'),
+                ],
+              ),
             ),
+          ),
+          floatingActionButton: ButtonFloatingActionRight(
+            cubit: cubit,
+            isKeyboardOpen: isKeyboardOpen,
+            state: state,
           ),
           body: Stack(
             children: [
@@ -57,59 +48,20 @@ class SpeechPage extends StatelessWidget {
                       idPatient: 1,
                       date: '01/01/2021',
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          child: TextField(
-                            controller: cubit.textEditingController,
-                            readOnly: state is RecordingSpeechState,
-                            decoration: InputDecoration(
-                                hintText: state is RecordingSpeechState
-                                    ? 'Escutando...'
-                                    : 'Aperte uma vez para comecar a gravar...'),
-                            maxLines: null,
-                          ),
-                        ),
-                      ),
-                    ),
+                    ExpandedContainer(cubit: cubit, state: state)
                   ],
                 ),
               ),
-              Positioned(
-                left: 16,
-                bottom: 16,
-                child: AnimatedOpacity(
-                  opacity: isKeyboardOpen ? 0 : 1,
-                  duration: const Duration(milliseconds: 500),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      cubit.clearText();
-                    },
-                    tooltip: 'Limpar',
-                    backgroundColor: Colors.red,
-                    child: const Icon(Icons.clear),
-                  ),
+              ButtonFloatingActionLeft(
+                isKeyboardOpen: isKeyboardOpen,
+                cubit: cubit,
+              ),
+              Visibility(
+                visible: state is RecordingSpeechState,
+                child: ImageFilterCustom(
+                  cubit: cubit,
                 ),
               ),
-              if (state is RecordingSpeechState)
-                Positioned.fill(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.7),
-                      child: Center(
-                        child: Text(
-                          cubit.text,
-                          style: const TextStyle(
-                              fontSize: 20, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         );

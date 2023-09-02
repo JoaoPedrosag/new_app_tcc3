@@ -15,7 +15,7 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   final SpeechToText speechToText = SpeechToText();
 
-  String text = 'Pressione o botão para comecar a falar a evolucao do paciente';
+  String text = '';
 
   final TextEditingController textEditingController = TextEditingController();
 
@@ -62,7 +62,6 @@ class SpeechCubit extends Cubit<SpeechState> {
       _wordsSpeech.add(result.recognizedWords);
       emit(RecognizedSpeechState(text: result.recognizedWords));
     } else {
-      // Atualizar 'text' mesmo quando o resultado não é final
       text = "${result.recognizedWords} ";
       emit(RecordingSpeechState());
     }
