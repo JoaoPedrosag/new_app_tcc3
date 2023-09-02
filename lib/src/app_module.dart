@@ -13,7 +13,7 @@ class AppModule extends Module {
       '/speech',
       module: SpeechModule(),
       transition: TransitionType.downToUp,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1000),
     );
   }
 }
