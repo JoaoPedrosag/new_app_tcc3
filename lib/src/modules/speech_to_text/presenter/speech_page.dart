@@ -23,14 +23,23 @@ class _SpeechPageState extends State<SpeechPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gravar evolução de paciente'),
-      ),
-      body: BlocBuilder<SpeechCubit, SpeechState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Stack(
+    return BlocBuilder<SpeechCubit, SpeechState>(
+      bloc: cubit,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Gravar evolução de paciente'),
+          ),
+          floatingActionButton: FloatingActionButton(
+            heroTag: null,
+            onPressed: () {
+              cubit.startListening();
+            },
+            tooltip: 'Escutando',
+            child:
+                Icon(state is RecordingSpeechState ? Icons.mic : Icons.mic_off),
+          ),
+          body: Stack(
             children: [
               Center(
                 child: Column(
@@ -74,22 +83,9 @@ class _SpeechPageState extends State<SpeechPage> {
                 ),
               ),
             ],
-          );
-        },
-      ),
-      floatingActionButton: BlocBuilder<SpeechCubit, SpeechState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return FloatingActionButton(
-            onPressed: () {
-              cubit.startListening();
-            },
-            tooltip: 'Escutando',
-            child:
-                Icon(state is RecordingSpeechState ? Icons.mic : Icons.mic_off),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
