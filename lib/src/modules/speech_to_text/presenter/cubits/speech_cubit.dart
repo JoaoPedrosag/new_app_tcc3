@@ -1,8 +1,11 @@
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+
+import '../../repository/speech_impl.dart';
 
 class SpeechCubit extends Cubit<SpeechState> {
   SpeechCubit() : super(InitialSpeechState()) {
@@ -14,6 +17,8 @@ class SpeechCubit extends Cubit<SpeechState> {
   List<String> get words => _wordsSpeech;
 
   final SpeechToText speechToText = SpeechToText();
+
+  final saveFile = Modular.get<SpeechImpl>();
 
   String text = '';
 
@@ -70,5 +75,15 @@ class SpeechCubit extends Cubit<SpeechState> {
   void clearText() {
     textEditingController.clear();
     emit(ClearSpeechState());
+  }
+
+  void saveText() async {
+    final text = textEditingController.text;
+    final nameFile = DateTime.now().toString();
+    final result = await saveFile.saveFile(text: text, nameFile: nameFile);
+
+    final string = await saveFile.readFile(nameFile: nameFile);
+
+    print(string);
   }
 }

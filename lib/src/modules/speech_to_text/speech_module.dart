@@ -1,5 +1,7 @@
+import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/speech_page.dart';
+import 'package:app_hospital/src/modules/speech_to_text/repository/speech_impl.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SpeechModule extends Module {
@@ -11,6 +13,8 @@ class SpeechModule extends Module {
         onDispose: (bloc) => bloc.close(),
       ),
     );
+    i.add(PathProviderImpl.new);
+    i.addSingleton(SpeechImpl.new);
   }
 
   @override
