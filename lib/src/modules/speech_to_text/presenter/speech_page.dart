@@ -8,13 +8,31 @@ import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
-class SpeechPage extends StatelessWidget {
+class SpeechPage extends StatefulWidget {
   const SpeechPage({super.key});
 
   @override
+  State<SpeechPage> createState() => _SpeechPageState();
+}
+
+class _SpeechPageState extends State<SpeechPage> {
+  final cubit = Modular.get<SpeechCubit>();
+  @override
+  void initState() {
+    cubit.initSession();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cubit.disposeSession();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final cubit = Modular.get<SpeechCubit>();
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return BlocBuilder<SpeechCubit, SpeechState>(
       bloc: cubit,

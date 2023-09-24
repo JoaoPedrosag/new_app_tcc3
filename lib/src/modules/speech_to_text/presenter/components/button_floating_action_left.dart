@@ -17,8 +17,8 @@ class ButtonFloatingActionLeft extends StatelessWidget {
         duration: const Duration(milliseconds: 500),
         child: FloatingActionButton(
           onPressed: () {
-            cubit.saveText();
-            // cubit.clearText();
+            // cubit.saveText();
+            cubit.clearText();
           },
           tooltip: 'Limpar',
           backgroundColor: Theme.of(context).colorScheme.error,
