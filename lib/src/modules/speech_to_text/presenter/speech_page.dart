@@ -8,31 +8,15 @@ import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 
-class SpeechPage extends StatefulWidget {
+import 'components/button_floating_save_text.dart';
+
+class SpeechPage extends StatelessWidget {
   const SpeechPage({super.key});
 
   @override
-  State<SpeechPage> createState() => _SpeechPageState();
-}
-
-class _SpeechPageState extends State<SpeechPage> {
-  final cubit = Modular.get<SpeechCubit>();
-  @override
-  void initState() {
-    cubit.initSession();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    cubit.disposeSession();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cubit = Modular.get<SpeechCubit>();
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return BlocBuilder<SpeechCubit, SpeechState>(
       bloc: cubit,
@@ -50,10 +34,24 @@ class _SpeechPageState extends State<SpeechPage> {
               ),
             ),
           ),
-          floatingActionButton: ButtonFloatingActionRight(
-            cubit: cubit,
-            isKeyboardOpen: isKeyboardOpen,
-            state: state,
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Visibility(
+                visible: state is RecognizedSpeechState,
+                child: ButtonFloatinSaveText(
+                  cubit: cubit,
+                  isKeyboardOpen: isKeyboardOpen,
+                  state: state,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ButtonFloatingActionRight(
+                cubit: cubit,
+                isKeyboardOpen: isKeyboardOpen,
+                state: state,
+              ),
+            ],
           ),
           body: Stack(
             children: [

@@ -2,7 +2,6 @@ import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -20,8 +19,6 @@ class SpeechCubit extends Cubit<SpeechState> {
   List<String> get words => _wordsSpeech;
 
   final SpeechToText speechToText = SpeechToText();
-
-  final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
 
   final saveFile = Modular.get<SpeechImpl>();
 
@@ -42,7 +39,6 @@ class SpeechCubit extends Cubit<SpeechState> {
   Future<void> startListening() async {
     if (speechToText.isListening) {
       await speechToText.stop();
-      stop();
       emit(InitialSpeechState());
       return;
     }
@@ -54,10 +50,6 @@ class SpeechCubit extends Cubit<SpeechState> {
       cancelOnError: true,
     );
     text = '';
-    if (_myRecorder.isRecording) {
-      await _myRecorder.stopRecorder();
-    }
-    record();
     emit(RecordingSpeechState());
   }
 
@@ -85,30 +77,10 @@ class SpeechCubit extends Cubit<SpeechState> {
   void saveText() async {
     final text = textEditingController.text;
     final nameFile = DateTime.now().toString();
-    final result = await saveFile.saveFile(text: text, nameFile: nameFile);
+    await saveFile.saveFile(text: text, nameFile: nameFile);
 
     final string = await saveFile.readFile(nameFile: nameFile);
 
     print(string);
-  }
-
-  Future<void> initSession() async {
-    await _myRecorder.openRecorder();
-  }
-
-  Future<void> disposeSession() async {
-    _myRecorder.closeRecorder();
-  }
-
-  Future<void> record() async {
-    final nameFile = DateTime.now().toString();
-    await _myRecorder.startRecorder(
-      codec: Codec.aacADTS,
-      toFile: '/data/user/0/com.example.app_hospital/app_flutter/$nameFile.aac',
-    );
-  }
-
-  Future<void> stop() async {
-    await _myRecorder.stopRecorder();
   }
 }
