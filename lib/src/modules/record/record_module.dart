@@ -1,15 +1,15 @@
 import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/speech_page.dart';
-import 'package:app_hospital/src/modules/speech_to_text/repository/speech_impl.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
+import 'package:app_hospital/src/modules/record/presenter/record_page.dart';
+import 'package:app_hospital/src/modules/record/repository/record_impl.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SpeechModule extends Module {
   @override
   void binds(i) {
-    i.addSingleton<SpeechCubit>(
-      SpeechCubit.new,
+    i.addSingleton<RecordCubit>(
+      RecordCubit.new,
       config: BindConfig(
         onDispose: (bloc) => bloc.close(),
       ),
@@ -21,6 +21,6 @@ class SpeechModule extends Module {
 
   @override
   void routes(r) {
-    r.child('/', child: (context) => const SpeechPage());
+    r.child('/', child: (context) => const RecordPage());
   }
 }

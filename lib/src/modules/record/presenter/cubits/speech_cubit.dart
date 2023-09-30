@@ -1,26 +1,18 @@
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 
-import '../../repository/speech_impl.dart';
+import '../../repository/record_impl.dart';
 
-class SpeechCubit extends Cubit<SpeechState> {
+class RecordCubit extends Cubit<RecordState> {
   final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
-  SpeechCubit() : super(InitialSpeechState()) {
-    _initSpeech();
+  RecordCubit() : super(InitialRecordState()) {
+    _initRecord();
   }
 
-  final List<String> _wordsSpeech = [];
-
   final bool openSession = false;
-
-  List<String> get words => _wordsSpeech;
-
-  final SpeechToText speechToText = SpeechToText();
 
   String text = '';
 
@@ -28,9 +20,9 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   final voiceRepository = Modular.get<SpeechImpl>();
 
-  void _initSpeech() async {
+  void _initRecord() async {
     await _myRecorder.openRecorder();
-    emit(InitialSpeechState());
+    emit(InitialRecordState());
   }
 
   // Future<void> startListening() async {
@@ -53,7 +45,7 @@ class SpeechCubit extends Cubit<SpeechState> {
   Future<void> startRecording() async {
     if (_myRecorder.isRecording) {
       await _myRecorder.stopRecorder();
-      emit(InitialSpeechState());
+      emit(InitialRecordState());
       return;
     }
     final String nameFile = DateTime.now().toString();
@@ -62,7 +54,7 @@ class SpeechCubit extends Cubit<SpeechState> {
       codec: Codec.defaultCodec,
     );
     print('/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav');
-    emit(RecordingSpeechState());
+    emit(RecordingRecordState());
   }
 
   Future<void> uploadFile() {
@@ -73,25 +65,25 @@ class SpeechCubit extends Cubit<SpeechState> {
     );
   }
 
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    if (result.finalResult) {
-      text += "${result.recognizedWords} ";
-      textEditingController.text += "${result.recognizedWords} ";
-      textEditingController.selection = TextSelection.fromPosition(
-        TextPosition(offset: textEditingController.text.length),
-      );
+  void _onRecordResult() {
+    // if (result.finalResult) {
+    //   text += "${result.recognizedWords} ";
+    //   textEditingController.text += "${result.recognizedWords} ";
+    //   textEditingController.selection = TextSelection.fromPosition(
+    //     TextPosition(offset: textEditingController.text.length),
+    //   );
 
-      _wordsSpeech.add(result.recognizedWords);
-      emit(RecognizedSpeechState(text: result.recognizedWords));
-    } else {
-      text = "${result.recognizedWords} ";
-      emit(RecordingSpeechState());
-    }
+    //   _wordsRecord.add(result.recognizedWords);
+    //   emit(RecognizedRecordState(text: result.recognizedWords));
+    // } else {
+    //   text = "${result.recognizedWords} ";
+    //   emit(RecordingRecordState());
+    // }
   }
 
   void clearText() {
     textEditingController.clear();
-    emit(ClearSpeechState());
+    emit(ClearRecordState());
   }
 
   void saveText() async {
@@ -106,6 +98,6 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   void closeRecorder() async {
     await _myRecorder.closeRecorder();
-    emit(InitialSpeechState());
+    emit(InitialRecordState());
   }
 }

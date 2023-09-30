@@ -1,10 +1,10 @@
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 
 class ButtonFloatingActionRight extends StatelessWidget {
-  final SpeechCubit cubit;
-  final SpeechState state;
+  final RecordCubit cubit;
+  final RecordState state;
   final bool isKeyboardOpen;
 
   const ButtonFloatingActionRight({
@@ -20,7 +20,7 @@ class ButtonFloatingActionRight extends StatelessWidget {
       opacity: isKeyboardOpen ? 0 : 1,
       duration: const Duration(milliseconds: 500),
       child: FloatingActionButton(
-        backgroundColor: state is RecordingSpeechState
+        backgroundColor: state is RecordingRecordState
             ? Theme.of(context).colorScheme.secondaryContainer
             : Theme.of(context).colorScheme.primary,
         heroTag: null,
@@ -28,7 +28,7 @@ class ButtonFloatingActionRight extends StatelessWidget {
           cubit.startRecording();
         },
         tooltip: 'Escutando',
-        child: Icon(state is RecordingSpeechState ? Icons.mic : Icons.mic_off),
+        child: Icon(state is RecordingRecordState ? Icons.mic : Icons.mic_off),
       ),
     );
   }

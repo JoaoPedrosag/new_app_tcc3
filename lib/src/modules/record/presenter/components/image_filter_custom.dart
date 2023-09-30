@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 
 class ImageFilterCustom extends StatelessWidget {
-  final SpeechCubit cubit;
+  final RecordCubit cubit;
   const ImageFilterCustom({super.key, required this.cubit});
 
   @override

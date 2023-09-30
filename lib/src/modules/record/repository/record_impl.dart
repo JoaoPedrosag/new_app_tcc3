@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
-import 'package:app_hospital/src/modules/speech_to_text/repository/i_speech.dart';
+import 'package:app_hospital/src/modules/record/repository/i_record.dart';
 import 'package:dio/dio.dart';
 
 class SpeechImpl extends ISpeech {
@@ -51,7 +51,6 @@ class SpeechImpl extends ISpeech {
   Future<bool> uploadFile(
       {required String path, required String nameFile}) async {
     try {
-      print(path);
       File file = File(path);
       if (await file.exists()) {
         final formData = {

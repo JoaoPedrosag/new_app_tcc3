@@ -1,35 +1,35 @@
-import 'package:app_hospital/src/modules/speech_to_text/presenter/components/button_floating_action_left.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/components/button_floating_action_right.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/components/expanded_container.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/components/image_filter_custom.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/components/list_tile_custom.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_state.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/button_floating_action_left.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/button_floating_action_right.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/expanded_container.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/image_filter_custom.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/list_tile_custom.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'components/button_floating_save_text.dart';
 
-class SpeechPage extends StatefulWidget {
-  const SpeechPage({super.key});
+class RecordPage extends StatefulWidget {
+  const RecordPage({super.key});
 
   @override
-  State<SpeechPage> createState() => _SpeechPageState();
+  State<RecordPage> createState() => _RecordPageState();
 }
 
-class _SpeechPageState extends State<SpeechPage> {
+class _RecordPageState extends State<RecordPage> {
   @override
   Widget build(BuildContext context) {
-    final cubit = Modular.get<SpeechCubit>();
+    final cubit = Modular.get<RecordCubit>();
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
-    return BlocBuilder<SpeechCubit, SpeechState>(
+    return BlocBuilder<RecordCubit, RecordState>(
       bloc: cubit,
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
             title: Visibility(
-              visible: state is RecordingSpeechState,
+              visible: state is RecordingRecordState,
               replacement: const Text('Gravar evolução de paciente'),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +43,7 @@ class _SpeechPageState extends State<SpeechPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Visibility(
-                visible: state is RecognizedSpeechState,
+                visible: state is RecognizedRecordState,
                 child: ButtonFloatinSaveText(
                   cubit: cubit,
                   isKeyboardOpen: isKeyboardOpen,
@@ -78,7 +78,7 @@ class _SpeechPageState extends State<SpeechPage> {
                 cubit: cubit,
               ),
               Visibility(
-                visible: state is RecordingSpeechState,
+                visible: state is RecordingRecordState,
                 child: ImageFilterCustom(
                   cubit: cubit,
                 ),

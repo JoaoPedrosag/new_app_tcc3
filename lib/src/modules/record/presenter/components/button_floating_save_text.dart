@@ -1,11 +1,11 @@
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 
-import '../cubits/speech_cubit.dart';
-import '../cubits/speech_state.dart';
+import '../cubits/record_state.dart';
 
 class ButtonFloatinSaveText extends StatelessWidget {
-  final SpeechCubit cubit;
-  final SpeechState state;
+  final RecordCubit cubit;
+  final RecordState state;
   final bool isKeyboardOpen;
   const ButtonFloatinSaveText(
       {super.key,
@@ -25,7 +25,7 @@ class ButtonFloatinSaveText extends StatelessWidget {
           cubit.saveText();
         },
         tooltip: 'Salvar texto',
-        child: Icon(state is RecordingSpeechState ? null : Icons.print),
+        child: Icon(state is RecordingRecordState ? null : Icons.print),
       ),
     );
   }

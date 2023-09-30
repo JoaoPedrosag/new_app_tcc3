@@ -1,9 +1,9 @@
-import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 
 class ButtonFloatingActionLeft extends StatelessWidget {
   final bool isKeyboardOpen;
-  final SpeechCubit cubit;
+  final RecordCubit cubit;
   const ButtonFloatingActionLeft(
       {super.key, required this.isKeyboardOpen, required this.cubit});
 
