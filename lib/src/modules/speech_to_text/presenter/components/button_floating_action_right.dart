@@ -25,7 +25,7 @@ class ButtonFloatingActionRight extends StatelessWidget {
             : Theme.of(context).colorScheme.primary,
         heroTag: null,
         onPressed: () {
-          cubit.startListening();
+          cubit.startRecording();
         },
         tooltip: 'Escutando',
         child: Icon(state is RecordingSpeechState ? Icons.mic : Icons.mic_off),

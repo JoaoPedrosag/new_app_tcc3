@@ -1,3 +1,4 @@
+import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_cubit.dart';
 import 'package:app_hospital/src/modules/speech_to_text/presenter/speech_page.dart';
@@ -15,6 +16,7 @@ class SpeechModule extends Module {
     );
     i.add(PathProviderImpl.new);
     i.addSingleton(SpeechImpl.new);
+    i.addSingleton(DioClient.new);
   }
 
   @override

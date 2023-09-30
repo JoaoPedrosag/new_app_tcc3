@@ -8,7 +8,6 @@ import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 
 import 'components/button_floating_save_text.dart';
 
@@ -20,38 +19,6 @@ class SpeechPage extends StatefulWidget {
 }
 
 class _SpeechPageState extends State<SpeechPage> {
-  bool isGraver = false;
-  FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
-
-  @override
-  void initState() {
-    super.initState();
-    // Be careful : openAudioSession return a Future.
-    // Do not access your FlutterSoundPlayer or FlutterSoundRecorder before the completion of the Future
-    _myRecorder.openRecorder().then((value) {
-      print('value = $value');
-    });
-  }
-
-  @override
-  void dispose() {
-    // Be careful : you must `close` the audio session when you have finished with it.
-    _myRecorder.closeRecorder();
-    super.dispose();
-  }
-
-  Future<void> record() async {
-    final String nameFile = DateTime.now().toString();
-    await _myRecorder.startRecorder(
-      toFile: '/data/user/0/com.example.app_hospital/app_flutter/$nameFile.aac',
-      codec: Codec.aacADTS,
-    );
-  }
-
-  Future<void> stopRecorder() async {
-    await _myRecorder.stopRecorder();
-  }
-
   @override
   Widget build(BuildContext context) {
     final cubit = Modular.get<SpeechCubit>();
@@ -75,18 +42,6 @@ class _SpeechPageState extends State<SpeechPage> {
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    if (!isGraver) {
-                      record();
-
-                      isGraver = true;
-                    } else {
-                      isGraver = false;
-                      stopRecorder();
-                    }
-                  },
-                  child: const Text('Gravar')),
               Visibility(
                 visible: state is RecognizedSpeechState,
                 child: ButtonFloatinSaveText(

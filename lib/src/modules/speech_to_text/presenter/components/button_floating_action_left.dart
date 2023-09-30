@@ -18,7 +18,7 @@ class ButtonFloatingActionLeft extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: () {
             // cubit.saveText();
-            cubit.clearText();
+            cubit.uploadFile();
           },
           tooltip: 'Limpar',
           backgroundColor: Theme.of(context).colorScheme.error,

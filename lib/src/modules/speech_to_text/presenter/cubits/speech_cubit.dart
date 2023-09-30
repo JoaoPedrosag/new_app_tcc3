@@ -2,12 +2,14 @@ import 'package:app_hospital/src/modules/speech_to_text/presenter/cubits/speech_
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../repository/speech_impl.dart';
 
 class SpeechCubit extends Cubit<SpeechState> {
+  final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
   SpeechCubit() : super(InitialSpeechState()) {
     _initSpeech();
   }
@@ -20,37 +22,55 @@ class SpeechCubit extends Cubit<SpeechState> {
 
   final SpeechToText speechToText = SpeechToText();
 
-  final saveFile = Modular.get<SpeechImpl>();
-
   String text = '';
 
   final TextEditingController textEditingController = TextEditingController();
 
+  final voiceRepository = Modular.get<SpeechImpl>();
+
   void _initSpeech() async {
-    final speechEnabled = await speechToText.initialize();
-    if (speechEnabled) {
-      emit(InitialSpeechState());
-    } else {
-      emit(ErrorSpeechState(
-          message: 'Erro ao inicializar o reconhecimento de voz'));
-    }
+    await _myRecorder.openRecorder();
+    emit(InitialSpeechState());
   }
 
-  Future<void> startListening() async {
-    if (speechToText.isListening) {
-      await speechToText.stop();
+  // Future<void> startListening() async {
+  //   if (speechToText.isListening) {
+  //     await speechToText.stop();
+  //     emit(InitialSpeechState());
+  //     return;
+  //   }
+  //   await speechToText.listen(
+  //     onResult: _onSpeechResult,
+  //     pauseFor: const Duration(seconds: 20),
+  //     listenFor: const Duration(seconds: 60),
+  //     localeId: 'pt_BR',
+  //     cancelOnError: true,
+  //   );
+  //   text = '';
+  //   emit(RecordingSpeechState());
+  // }
+
+  Future<void> startRecording() async {
+    if (_myRecorder.isRecording) {
+      await _myRecorder.stopRecorder();
       emit(InitialSpeechState());
       return;
     }
-    await speechToText.listen(
-      onResult: _onSpeechResult,
-      pauseFor: const Duration(seconds: 20),
-      listenFor: const Duration(seconds: 60),
-      localeId: 'pt_BR',
-      cancelOnError: true,
+    final String nameFile = DateTime.now().toString();
+    await _myRecorder.startRecorder(
+      toFile: '/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav',
+      codec: Codec.defaultCodec,
     );
-    text = '';
+    print('/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav');
     emit(RecordingSpeechState());
+  }
+
+  Future<void> uploadFile() {
+    return voiceRepository.uploadFile(
+      path:
+          '/data/user/0/com.example.app_hospital/app_flutter/2023-09-30 13:23:36.879714.wav',
+      nameFile: '2023-09-30 13:23:36.879714.wav',
+    );
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
@@ -77,10 +97,15 @@ class SpeechCubit extends Cubit<SpeechState> {
   void saveText() async {
     final text = textEditingController.text;
     final nameFile = DateTime.now().toString();
-    await saveFile.saveFile(text: text, nameFile: nameFile);
+    await voiceRepository.saveFile(text: text, nameFile: nameFile);
 
-    final string = await saveFile.readFile(nameFile: nameFile);
+    final string = await voiceRepository.readFile(nameFile: nameFile);
 
     print(string);
+  }
+
+  void closeRecorder() async {
+    await _myRecorder.closeRecorder();
+    emit(InitialSpeechState());
   }
 }
