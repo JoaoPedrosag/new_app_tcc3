@@ -20,6 +20,8 @@ class RecordCubit extends Cubit<RecordState> {
 
   final voiceRepository = Modular.get<SpeechImpl>();
 
+  Stream<Duration>? durationStream;
+
   void _initRecord() async {
     await _myRecorder.openRecorder();
     emit(InitialRecordState());
@@ -45,9 +47,12 @@ class RecordCubit extends Cubit<RecordState> {
   Future<void> startRecording() async {
     if (_myRecorder.isRecording) {
       await _myRecorder.stopRecorder();
+      durationStream = null;
       emit(InitialRecordState());
       return;
     }
+
+    durationStream = _myRecorder.onProgress!.map((e) => e.duration);
     final String nameFile = DateTime.now().toString();
     await _myRecorder.startRecorder(
       toFile: '/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav',
