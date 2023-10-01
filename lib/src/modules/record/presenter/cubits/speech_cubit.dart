@@ -11,8 +11,12 @@ import '../../repository/record_impl.dart';
 
 class RecordCubit extends Cubit<RecordState> {
   final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
+  final FlutterSoundPlayer _myPlayer = FlutterSoundPlayer();
 
   final Codec _codec = Codec.aacADTS;
+
+  Duration? totalDuration;
+  Duration? currentPosition;
 
   RecordCubit() : super(InitialRecordState()) {
     _initRecord();
@@ -24,10 +28,39 @@ class RecordCubit extends Cubit<RecordState> {
 
   final voiceRepository = Modular.get<SpeechImpl>();
 
-  void _initRecord() async {
+  Future<void> _initRecord() async {
     await openTheRecorder();
+    await _initPlayer();
 
     emit(InitialRecordState());
+  }
+
+  Future<void> _initPlayer() async {
+    await _myPlayer.openPlayer();
+  }
+
+  Future<void> playLastRecordedFile() async {
+    if (state is AudioProgressState) {
+      await pausePlaying();
+      emit(AudioStoppedState());
+      return;
+    }
+    if (lastRecordedPath != null) {
+      if (_myPlayer.isPaused) {
+        await _myPlayer.resumePlayer();
+        emit(AudioProgressState());
+        return;
+      }
+      await _myPlayer.startPlayer(
+          fromURI: lastRecordedPath,
+          whenFinished: () {
+            currentPosition = null;
+            emit(AudioStoppedState());
+          });
+      emit(AudioProgressState());
+    } else {
+      log("Nenhum arquivo para tocar.");
+    }
   }
 
   Future<void> openTheRecorder() async {
@@ -74,5 +107,20 @@ class RecordCubit extends Cubit<RecordState> {
     } else {
       log("Nenhum arquivo para enviar.");
     }
+  }
+
+  Future<void> pausePlaying() async {
+    if (_myPlayer.isPlaying && !_myPlayer.isPaused) {
+      await _myPlayer.pausePlayer();
+    }
+  }
+
+  Future<void> resumePlaying() async {
+    await _myPlayer.resumePlayer();
+  }
+
+  Future<void> seekToPosition(int positionInMilliseconds) async {
+    await _myPlayer
+        .seekToPlayer(Duration(milliseconds: positionInMilliseconds));
   }
 }

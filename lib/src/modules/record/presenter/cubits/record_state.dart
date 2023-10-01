@@ -8,11 +8,9 @@ class RecordingProgressState extends RecordState {
   RecordingProgressState({required this.duration});
 }
 
-final class RecognizedRecordState extends RecordState {
-  final String text;
+class AudioProgressState extends RecordState {}
 
-  RecognizedRecordState({required this.text});
-}
+class AudioStoppedState extends RecordState {}
 
 final class StoppedRecordState extends RecordState {}
 

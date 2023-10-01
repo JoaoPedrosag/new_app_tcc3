@@ -18,6 +18,7 @@ class _RecordPageState extends State<RecordPage> {
   Widget build(BuildContext context) {
     final cubit = Modular.get<RecordCubit>();
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
+
     return BlocBuilder<RecordCubit, RecordState>(
       bloc: cubit,
       builder: (context, state) {
@@ -62,6 +63,33 @@ class _RecordPageState extends State<RecordPage> {
                         ? Text(
                             'Escutando... ${state.duration.inSeconds} segundos')
                         : Container(),
+                  ),
+                  Visibility(
+                    visible: cubit.lastRecordedPath != null &&
+                        state is! RecordingProgressState,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: state is AudioProgressState
+                                  ? const Icon(
+                                      Icons.pause,
+                                      size: 45,
+                                    )
+                                  : const Icon(
+                                      Icons.play_arrow,
+                                      size: 45,
+                                    ),
+                              onPressed: () {
+                                cubit.playLastRecordedFile();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
