@@ -1,4 +1,5 @@
 import 'package:app_hospital/src/modules/record/presenter/components/button_floating_action_right.dart';
+import 'package:app_hospital/src/modules/record/presenter/components/button_send_upload_file.dart';
 import 'package:app_hospital/src/modules/record/presenter/components/list_tile_custom.dart';
 import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
 import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
@@ -17,7 +18,6 @@ class _RecordPageState extends State<RecordPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = Modular.get<RecordCubit>();
-    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return BlocBuilder<RecordCubit, RecordState>(
       bloc: cubit,
@@ -42,7 +42,6 @@ class _RecordPageState extends State<RecordPage> {
             children: [
               ButtonFloatingActionRight(
                 cubit: cubit,
-                isKeyboardOpen: isKeyboardOpen,
                 state: state,
               ),
             ],
@@ -57,6 +56,11 @@ class _RecordPageState extends State<RecordPage> {
                     idPatient: 1,
                     date: '01/01/2021',
                   ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Modular.to.pushNamed('/record/records_patient');
+                      },
+                      child: const Text('Acessar ultimos registros')),
                   Visibility(
                     visible: state is RecordingProgressState,
                     child: (state is RecordingProgressState)
@@ -92,6 +96,18 @@ class _RecordPageState extends State<RecordPage> {
                     ),
                   ),
                 ],
+              ),
+              Visibility(
+                visible: cubit.lastRecordedPath != null &&
+                    state is! RecordingProgressState,
+                child: Positioned(
+                  bottom: 45,
+                  right: 10,
+                  child: ButtonSendUploadFile(
+                    cubit: cubit,
+                    state: state,
+                  ),
+                ),
               ),
             ],
           ),

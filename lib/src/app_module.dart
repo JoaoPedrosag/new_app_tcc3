@@ -10,7 +10,7 @@ class AppModule extends Module {
   void routes(r) {
     r.child('/', child: (context) => const SplashPage());
     r.module(
-      '/speech',
+      '/record',
       module: SpeechModule(),
       transition: TransitionType.downToUp,
       duration: const Duration(milliseconds: 1000),
