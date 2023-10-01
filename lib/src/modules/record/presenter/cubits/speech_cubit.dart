@@ -1,108 +1,78 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../repository/record_impl.dart';
 
 class RecordCubit extends Cubit<RecordState> {
   final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
+
+  final Codec _codec = Codec.aacADTS;
+
   RecordCubit() : super(InitialRecordState()) {
     _initRecord();
   }
 
-  final bool openSession = false;
-
-  String text = '';
-
-  final TextEditingController textEditingController = TextEditingController();
+  Timer? _timer;
+  int elapsedSeconds = 0;
+  String? lastRecordedPath;
 
   final voiceRepository = Modular.get<SpeechImpl>();
 
-  Stream<Duration>? durationStream;
-
   void _initRecord() async {
-    await _myRecorder.openRecorder();
+    await openTheRecorder();
+
     emit(InitialRecordState());
   }
 
-  // Future<void> startListening() async {
-  //   if (speechToText.isListening) {
-  //     await speechToText.stop();
-  //     emit(InitialSpeechState());
-  //     return;
-  //   }
-  //   await speechToText.listen(
-  //     onResult: _onSpeechResult,
-  //     pauseFor: const Duration(seconds: 20),
-  //     listenFor: const Duration(seconds: 60),
-  //     localeId: 'pt_BR',
-  //     cancelOnError: true,
-  //   );
-  //   text = '';
-  //   emit(RecordingSpeechState());
-  // }
-
-  Future<void> startRecording() async {
-    if (_myRecorder.isRecording) {
-      await _myRecorder.stopRecorder();
-      durationStream = null;
-      emit(InitialRecordState());
+  Future<void> openTheRecorder() async {
+    var status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
       return;
     }
+    await _myRecorder.openRecorder();
+  }
 
-    durationStream = _myRecorder.onProgress!.map((e) => e.duration);
-    final String nameFile = DateTime.now().toString();
+  Future<void> startRecording() async {
+    emit(RecordingProgressState(duration: Duration(seconds: elapsedSeconds)));
+    if (_myRecorder.isRecording) {
+      await stopRecording();
+      return;
+    }
+    const uuid = Uuid();
+    final String randomFileName = '${uuid.v4()}.aac';
     await _myRecorder.startRecorder(
-      toFile: '/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav',
-      codec: Codec.defaultCodec,
+      codec: _codec,
+      toFile: randomFileName,
     );
-    print('/data/user/0/com.example.app_hospital/app_flutter/$nameFile.wav');
-    emit(RecordingRecordState());
+    lastRecordedPath = randomFileName;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      elapsedSeconds++;
+      emit(RecordingProgressState(duration: Duration(seconds: elapsedSeconds)));
+    });
   }
 
-  Future<void> uploadFile() {
-    return voiceRepository.uploadFile(
-      path:
-          '/data/user/0/com.example.app_hospital/app_flutter/2023-09-30 13:23:36.879714.wav',
-      nameFile: '2023-09-30 13:23:36.879714.wav',
-    );
-  }
-
-  void _onRecordResult() {
-    // if (result.finalResult) {
-    //   text += "${result.recognizedWords} ";
-    //   textEditingController.text += "${result.recognizedWords} ";
-    //   textEditingController.selection = TextSelection.fromPosition(
-    //     TextPosition(offset: textEditingController.text.length),
-    //   );
-
-    //   _wordsRecord.add(result.recognizedWords);
-    //   emit(RecognizedRecordState(text: result.recognizedWords));
-    // } else {
-    //   text = "${result.recognizedWords} ";
-    //   emit(RecordingRecordState());
-    // }
-  }
-
-  void clearText() {
-    textEditingController.clear();
-    emit(ClearRecordState());
-  }
-
-  void saveText() async {
-    final text = textEditingController.text;
-    final nameFile = DateTime.now().toString();
-    await voiceRepository.saveFile(text: text, nameFile: nameFile);
-
-    final string = await voiceRepository.readFile(nameFile: nameFile);
-
-    print(string);
-  }
-
-  void closeRecorder() async {
-    await _myRecorder.closeRecorder();
+  Future<void> stopRecording() async {
+    await _myRecorder.stopRecorder();
+    _timer?.cancel();
+    elapsedSeconds = 0;
     emit(InitialRecordState());
+  }
+
+  Future<void> uploadFile() async {
+    if (lastRecordedPath != null) {
+      await voiceRepository.uploadFile(
+        path: lastRecordedPath!,
+        nameFile: lastRecordedPath!.split('/').last,
+      );
+    } else {
+      log("Nenhum arquivo para enviar.");
+    }
   }
 }

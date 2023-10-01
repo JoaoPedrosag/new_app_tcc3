@@ -24,7 +24,7 @@ class _RecordPageState extends State<RecordPage> {
         return Scaffold(
           appBar: AppBar(
             title: Visibility(
-              visible: state is RecordingRecordState,
+              visible: state is RecordingProgressState,
               replacement: const Text('Gravar evolução de paciente'),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -39,15 +39,6 @@ class _RecordPageState extends State<RecordPage> {
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // Visibility(
-              //   visible: state is RecognizedRecordState,
-              //   child: ButtonFloatinSaveText(
-              //     cubit: cubit,
-              //     isKeyboardOpen: isKeyboardOpen,
-              //     state: state,
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
               ButtonFloatingActionRight(
                 cubit: cubit,
                 isKeyboardOpen: isKeyboardOpen,
@@ -65,24 +56,15 @@ class _RecordPageState extends State<RecordPage> {
                     idPatient: 1,
                     date: '01/01/2021',
                   ),
-                  StreamBuilder<Duration>(
-                    stream: cubit.durationStream,
-                    builder: (context, snapshot) {
-                      final duration = snapshot.data ?? Duration.zero;
-                      return Visibility(
-                        visible: state is RecordingRecordState,
-                        child: Text(
-                          'Escutando... ${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                        ),
-                      );
-                    },
+                  Visibility(
+                    visible: state is RecordingProgressState,
+                    child: (state is RecordingProgressState)
+                        ? Text(
+                            'Escutando... ${state.duration.inSeconds} segundos')
+                        : Container(),
                   ),
                 ],
               ),
-              // ButtonFloatingActionLeft(
-              //   isKeyboardOpen: isKeyboardOpen,
-              //   cubit: cubit,
-              // ),
             ],
           ),
         );

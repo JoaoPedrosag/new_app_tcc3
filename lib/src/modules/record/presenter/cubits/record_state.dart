@@ -2,7 +2,11 @@ sealed class RecordState {}
 
 final class InitialRecordState extends RecordState {}
 
-final class RecordingRecordState extends RecordState {}
+class RecordingProgressState extends RecordState {
+  final Duration duration;
+
+  RecordingProgressState({required this.duration});
+}
 
 final class RecognizedRecordState extends RecordState {
   final String text;

@@ -21,14 +21,14 @@ class ButtonFloatingActionRight extends StatelessWidget {
       opacity: isKeyboardOpen ? 0 : 1,
       duration: const Duration(milliseconds: 500),
       child: AvatarGlow(
-        animate: state is RecordingRecordState,
+        animate: state is RecordingProgressState,
         glowColor: Theme.of(context).colorScheme.secondaryContainer,
         endRadius: 75.0,
         duration: const Duration(milliseconds: 2000),
         repeatPauseDuration: const Duration(milliseconds: 300),
         repeat: true,
         child: FloatingActionButton(
-          backgroundColor: state is RecordingRecordState
+          backgroundColor: state is RecordingProgressState
               ? Theme.of(context).colorScheme.secondaryContainer
               : Theme.of(context).colorScheme.primary,
           heroTag: null,
@@ -37,7 +37,7 @@ class ButtonFloatingActionRight extends StatelessWidget {
           },
           tooltip: 'Escutando',
           child:
-              Icon(state is RecordingRecordState ? Icons.mic : Icons.mic_off),
+              Icon(state is RecordingProgressState ? Icons.mic : Icons.mic_off),
         ),
       ),
     );
