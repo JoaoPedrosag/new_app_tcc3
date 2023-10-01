@@ -4,6 +4,7 @@ import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
 import 'package:app_hospital/src/modules/record/repository/i_record.dart';
 import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SpeechImpl extends ISpeech {
   final PathProviderImpl path;
