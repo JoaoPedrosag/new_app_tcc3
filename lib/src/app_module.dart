@@ -1,4 +1,4 @@
-import 'package:app_hospital/src/modules/speech_to_text/speech_module.dart';
+import 'package:app_hospital/src/modules/record/record_module.dart';
 import 'package:app_hospital/src/modules/splash/splash_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -10,7 +10,7 @@ class AppModule extends Module {
   void routes(r) {
     r.child('/', child: (context) => const SplashPage());
     r.module(
-      '/speech',
+      '/record',
       module: SpeechModule(),
       transition: TransitionType.downToUp,
       duration: const Duration(milliseconds: 1000),
