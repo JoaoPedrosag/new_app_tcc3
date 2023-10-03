@@ -1,3 +1,4 @@
+import 'package:app_hospital/src/core/utils/functions.dart';
 import 'package:app_hospital/src/modules/record/domain/entities/consults_request.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,15 @@ class ListViewConsults extends StatelessWidget {
         itemCount: consults.length,
         itemBuilder: (context, index) {
           final consult = consults[index];
-          return ListTile(
-            title: Text(consult.id.toString()),
-            subtitle: Text(consult.convertedText),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: ListTile(
+                title: Text(consult.convertedText),
+                subtitle: Text(Functions.formatDate(consult.createdAt)),
+                trailing: const Icon(Icons.play_arrow),
+              ),
+            ),
           );
         },
       ),

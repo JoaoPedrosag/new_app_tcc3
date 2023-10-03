@@ -30,27 +30,31 @@ class _RecordsPatientPageState extends State<RecordsPatientPage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          BlocBuilder<ConsultCubit, ConsultState>(
-              bloc: consultCubit,
-              builder: (context, state) {
-                return switch (state) {
-                  ConsultInitial() => const Center(
-                      child:
-                          Text('Pressione o botão para carregar os registros'),
-                    ),
-                  ConsultLoading() => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ConsultSuccess(consults: final consults) =>
-                    ListViewConsults(consults: consults),
-                  ConsultFailure() => const Center(
-                      child: Text('Erro ao carregar os registros'),
-                    ),
-                };
-              }),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          consultCubit.getConsults();
+        },
+        child: Column(
+          children: [
+            BlocBuilder<ConsultCubit, ConsultState>(
+                bloc: consultCubit,
+                builder: (context, state) {
+                  return switch (state) {
+                    ConsultInitial() => Center(
+                        child: Container(),
+                      ),
+                    ConsultLoading() => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ConsultSuccess(consults: final consults) =>
+                      ListViewConsults(consults: consults),
+                    ConsultFailure() => const Center(
+                        child: Text('Erro ao carregar os registros'),
+                      ),
+                  };
+                }),
+          ],
+        ),
       ),
     );
   }

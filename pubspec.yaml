@@ -46,6 +46,7 @@ dependencies:
   dio: ^5.3.3
   avatar_glow: ^2.0.2
   uuid: ^3.0.4
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
