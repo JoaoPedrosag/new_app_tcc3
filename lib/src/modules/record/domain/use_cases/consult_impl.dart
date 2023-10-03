@@ -13,7 +13,7 @@ class ConsultImpl extends IConsult {
     try {
       var response = await dio.get(
           url:
-              '${Constants.endPoints.baseUrl}${Constants.endPoints.consults}$id/');
+              '${Constants.endPoints.baseUrl}${Constants.endPoints.consults}$id');
       final List<ConsultsRequest> consults = response.data
           .map<ConsultsRequest>((e) => ConsultsRequest.fromJson(e))
           .toList();

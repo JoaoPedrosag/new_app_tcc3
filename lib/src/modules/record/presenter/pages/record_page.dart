@@ -109,6 +109,10 @@ class _RecordPageState extends State<RecordPage> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: state is LoadingRecordState,
+                child: const CircularProgressIndicator(),
+              ),
             ],
           ),
         );

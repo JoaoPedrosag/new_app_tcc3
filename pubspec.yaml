@@ -47,6 +47,7 @@ dependencies:
   avatar_glow: ^2.0.2
   uuid: ^3.0.4
   intl: ^0.18.1
+  just_audio: ^0.9.35
 
 dev_dependencies:
   flutter_test:

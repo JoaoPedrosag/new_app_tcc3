@@ -105,6 +105,7 @@ class RecordCubit extends Cubit<RecordState> {
     try {
       if (lastRecordedPath != null) {
         emit(LoadingRecordState());
+        Future.delayed(const Duration(seconds: 5));
         final Directory tempDir = await getTemporaryDirectory();
         final String pathTotal = '${tempDir.path}/${lastRecordedPath!}';
         await voiceRepository.uploadFile(

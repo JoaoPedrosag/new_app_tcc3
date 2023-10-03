@@ -3,6 +3,7 @@ import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
 import 'package:app_hospital/src/modules/record/domain/use_cases/consult_impl.dart';
 import 'package:app_hospital/src/modules/record/domain/use_cases/record_impl.dart';
 import 'package:app_hospital/src/modules/record/presenter/cubits/consult_cubit.dart';
+import 'package:app_hospital/src/modules/record/presenter/cubits/player/player_cubit.dart';
 import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
 import 'package:app_hospital/src/modules/record/presenter/pages/record_page.dart';
 import 'package:app_hospital/src/modules/record/presenter/pages/records_patients_page.dart';
@@ -19,6 +20,12 @@ class SpeechModule extends Module {
     );
     i.addSingleton<ConsultCubit>(
       ConsultCubit.new,
+      config: BindConfig(
+        onDispose: (bloc) => bloc.close(),
+      ),
+    );
+    i.addSingleton<PlayerCubit>(
+      PlayerCubit.new,
       config: BindConfig(
         onDispose: (bloc) => bloc.close(),
       ),
