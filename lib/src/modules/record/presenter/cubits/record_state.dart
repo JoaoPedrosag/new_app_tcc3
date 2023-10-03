@@ -16,6 +16,8 @@ final class StoppedRecordState extends RecordState {}
 
 final class ClearRecordState extends RecordState {}
 
+final class LoadingRecordState extends RecordState {}
+
 final class ErrorRecordState extends RecordState {
   final String message;
 

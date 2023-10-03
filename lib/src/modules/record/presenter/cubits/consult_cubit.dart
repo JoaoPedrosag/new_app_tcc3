@@ -1,5 +1,5 @@
+import 'package:app_hospital/src/modules/record/domain/use_cases/consult_impl.dart';
 import 'package:app_hospital/src/modules/record/presenter/cubits/consult_state.dart';
-import 'package:app_hospital/src/modules/record/repository/consult_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

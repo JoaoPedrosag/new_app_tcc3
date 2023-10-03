@@ -1,7 +1,7 @@
 import 'package:app_hospital/src/core/const/constantes.dart';
 import 'package:app_hospital/src/core/data/dio_client.dart';
-import 'package:app_hospital/src/modules/record/repository/i_consult.dart';
-import 'package:app_hospital/src/modules/record/useCases/consults_request.dart';
+import 'package:app_hospital/src/modules/record/domain/entities/consults_request.dart';
+import 'package:app_hospital/src/modules/record/domain/interfaces/i_consult.dart';
 
 class ConsultImpl extends IConsult {
   final DioClient dio;
@@ -10,7 +10,6 @@ class ConsultImpl extends IConsult {
   });
   @override
   Future<List<ConsultsRequest>> getConsults({required int id}) async {
-    print('${Constants.endPoints.baseUrl}${Constants.endPoints.consults}$id/');
     try {
       var response = await dio.get(
           url:

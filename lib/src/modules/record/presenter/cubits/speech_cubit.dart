@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../repository/record_impl.dart';
+import '../../domain/use_cases/record_impl.dart';
 
 class RecordCubit extends Cubit<RecordState> {
   final FlutterSoundRecorder _myRecorder = FlutterSoundRecorder();
@@ -101,15 +102,20 @@ class RecordCubit extends Cubit<RecordState> {
   }
 
   Future<void> uploadFile() async {
-    if (lastRecordedPath != null) {
-      final Directory tempDir = await getTemporaryDirectory();
-      final String pathTotal = '${tempDir.path}/${lastRecordedPath!}';
-      await voiceRepository.uploadFile(
-        path: pathTotal,
-        nameFile: lastRecordedPath!,
-      );
-    } else {
-      log("Nenhum arquivo para enviar.");
+    try {
+      if (lastRecordedPath != null) {
+        emit(LoadingRecordState());
+        final Directory tempDir = await getTemporaryDirectory();
+        final String pathTotal = '${tempDir.path}/${lastRecordedPath!}';
+        await voiceRepository.uploadFile(
+          path: pathTotal,
+          nameFile: lastRecordedPath!,
+        );
+
+        emit(ClearRecordState());
+      }
+    } on Exception {
+      emit(ErrorRecordState(message: 'Erro ao enviar arquivo'));
     }
   }
 

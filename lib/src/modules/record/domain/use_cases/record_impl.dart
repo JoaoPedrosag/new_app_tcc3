@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app_hospital/src/core/const/constantes.dart';
 import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
-import 'package:app_hospital/src/modules/record/repository/i_record.dart';
+import 'package:app_hospital/src/modules/record/domain/interfaces/i_record.dart';
 import 'package:dio/dio.dart';
 
 class SpeechImpl extends ISpeech {
