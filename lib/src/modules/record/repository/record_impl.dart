@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:app_hospital/src/core/const/constantes.dart';
 import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
 import 'package:app_hospital/src/modules/record/repository/i_record.dart';
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SpeechImpl extends ISpeech {
   final PathProviderImpl path;
@@ -61,7 +61,8 @@ class SpeechImpl extends ISpeech {
         };
 
         final response = await dio.postFormData(
-            url: 'http://192.168.0.122:8000/upload/', data: formData);
+            url: Constants.endPoints.baseUrl + Constants.endPoints.upload,
+            data: formData);
         print(response);
         if (response.statusCode == 200) {
           print(response.data['converted_text']);
