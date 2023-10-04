@@ -15,24 +15,27 @@ class ButtonFloatingActionRight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AvatarGlow(
-      animate: state is RecordingProgressState,
-      glowColor: Theme.of(context).colorScheme.secondaryContainer,
-      endRadius: 75.0,
-      duration: const Duration(milliseconds: 2000),
-      repeatPauseDuration: const Duration(milliseconds: 300),
-      repeat: true,
-      child: FloatingActionButton(
-        backgroundColor: state is RecordingProgressState
-            ? Theme.of(context).colorScheme.secondaryContainer
-            : Theme.of(context).colorScheme.primary,
-        heroTag: null,
-        onPressed: () {
-          cubit.startRecording();
-        },
-        tooltip: 'Escutando',
-        child:
-            Icon(state is RecordingProgressState ? Icons.mic : Icons.mic_off),
+    return Visibility(
+      visible: state is! LoadingRecordState,
+      child: AvatarGlow(
+        animate: state is RecordingProgressState,
+        glowColor: Theme.of(context).colorScheme.secondaryContainer,
+        endRadius: 75.0,
+        duration: const Duration(milliseconds: 2000),
+        repeatPauseDuration: const Duration(milliseconds: 300),
+        repeat: true,
+        child: FloatingActionButton(
+          backgroundColor: state is RecordingProgressState
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : Theme.of(context).colorScheme.primary,
+          heroTag: null,
+          onPressed: () {
+            cubit.startRecording();
+          },
+          tooltip: 'Escutando',
+          child:
+              Icon(state is RecordingProgressState ? Icons.mic : Icons.mic_off),
+        ),
       ),
     );
   }
