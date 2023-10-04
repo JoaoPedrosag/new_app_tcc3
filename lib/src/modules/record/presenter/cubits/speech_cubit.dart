@@ -113,7 +113,7 @@ class RecordCubit extends Cubit<RecordState> {
           nameFile: lastRecordedPath!,
         );
 
-        emit(ClearRecordState());
+        clearRecord();
       }
     } on Exception {
       emit(ErrorRecordState(message: 'Erro ao enviar arquivo'));
@@ -133,5 +133,10 @@ class RecordCubit extends Cubit<RecordState> {
   Future<void> seekToPosition(int positionInMilliseconds) async {
     await _myPlayer
         .seekToPlayer(Duration(milliseconds: positionInMilliseconds));
+  }
+
+  void clearRecord() {
+    lastRecordedPath = null;
+    emit(ClearRecordState());
   }
 }
