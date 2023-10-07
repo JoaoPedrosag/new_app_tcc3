@@ -1,4 +1,5 @@
-import 'package:app_hospital/src/modules/record/record_module.dart';
+import 'package:app_hospital/src/modules/recording/recording_module.dart';
+import 'package:app_hospital/src/modules/records/records_module.dart';
 import 'package:app_hospital/src/modules/splash/splash_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -10,10 +11,16 @@ class AppModule extends Module {
   void routes(r) {
     r.child('/', child: (context) => const SplashPage());
     r.module(
-      '/record',
-      module: SpeechModule(),
+      '/recording',
+      module: RecordingModule(),
       transition: TransitionType.downToUp,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 700),
+    );
+    r.module(
+      '/records',
+      module: RecordsModule(),
+      transition: TransitionType.downToUp,
+      duration: const Duration(milliseconds: 700),
     );
   }
 }

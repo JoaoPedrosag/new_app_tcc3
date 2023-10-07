@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
+import 'package:app_hospital/src/modules/recording/presenter/cubits/record_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_sound/flutter_sound.dart';

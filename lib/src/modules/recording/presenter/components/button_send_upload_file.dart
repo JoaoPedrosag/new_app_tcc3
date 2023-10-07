@@ -1,5 +1,5 @@
-import 'package:app_hospital/src/modules/record/presenter/cubits/record_state.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/speech_cubit.dart';
+import 'package:app_hospital/src/modules/recording/presenter/cubits/record_state.dart';
+import 'package:app_hospital/src/modules/recording/presenter/cubits/speech_cubit.dart';
 import 'package:flutter/material.dart';
 
 class ButtonSendUploadFile extends StatelessWidget {

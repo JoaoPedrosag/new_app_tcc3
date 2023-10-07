@@ -8,7 +8,7 @@ class ButtonNavigate extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Modular.to.pushNamed('/record/records_patient');
+        Modular.to.pushNamed('/records/');
       },
       child: const Text('Acessar ultimos registros'),
     );

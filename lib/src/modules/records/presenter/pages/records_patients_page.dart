@@ -1,6 +1,6 @@
-import 'package:app_hospital/src/modules/record/presenter/components/list_view_consults.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/consult_cubit.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/consult_state.dart';
+import 'package:app_hospital/src/modules/records/presenter/components/list_view_consults.dart';
+import 'package:app_hospital/src/modules/records/presenter/cubits/consults/consult_cubit.dart';
+import 'package:app_hospital/src/modules/records/presenter/cubits/consults/consult_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -43,8 +43,16 @@ class _RecordsPatientPageState extends State<RecordsPatientPage> {
                     ConsultInitial() => Center(
                         child: Container(),
                       ),
-                    ConsultLoading() => const Center(
-                        child: CircularProgressIndicator(),
+                    ConsultLoading() => const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ],
                       ),
                     ConsultSuccess(consults: final consults) =>
                       ListViewConsults(consults: consults),

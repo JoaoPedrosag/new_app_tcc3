@@ -1,5 +1,5 @@
 import 'package:app_hospital/src/core/const/constantes.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/player/player_state_audio.dart';
+import 'package:app_hospital/src/modules/records/presenter/cubits/player/player_state_audio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 

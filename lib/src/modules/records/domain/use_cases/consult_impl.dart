@@ -1,7 +1,7 @@
 import 'package:app_hospital/src/core/const/constantes.dart';
 import 'package:app_hospital/src/core/data/dio_client.dart';
-import 'package:app_hospital/src/modules/record/domain/entities/consults_request.dart';
-import 'package:app_hospital/src/modules/record/domain/interfaces/i_consult.dart';
+import 'package:app_hospital/src/modules/records/domain/entities/consults_request.dart';
+import 'package:app_hospital/src/modules/records/domain/interfaces/i_consult.dart';
 
 class ConsultImpl extends IConsult {
   final DioClient dio;

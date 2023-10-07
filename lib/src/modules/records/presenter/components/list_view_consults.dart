@@ -1,7 +1,7 @@
 import 'package:app_hospital/src/core/utils/functions.dart';
-import 'package:app_hospital/src/modules/record/domain/entities/consults_request.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/player/player_cubit.dart';
-import 'package:app_hospital/src/modules/record/presenter/cubits/player/player_state_audio.dart';
+import 'package:app_hospital/src/modules/records/domain/entities/consults_request.dart';
+import 'package:app_hospital/src/modules/records/presenter/cubits/player/player_cubit.dart';
+import 'package:app_hospital/src/modules/records/presenter/cubits/player/player_state_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';

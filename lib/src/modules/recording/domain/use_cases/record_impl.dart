@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app_hospital/src/core/const/constantes.dart';
 import 'package:app_hospital/src/core/data/dio_client.dart';
 import 'package:app_hospital/src/core/repository/path_provider_impl.dart';
-import 'package:app_hospital/src/modules/record/domain/interfaces/i_record.dart';
+import 'package:app_hospital/src/modules/recording/domain/interfaces/i_record.dart';
 import 'package:dio/dio.dart';
 
 class SpeechImpl extends ISpeech {
@@ -63,9 +63,8 @@ class SpeechImpl extends ISpeech {
         final response = await dio.postFormData(
             url: Constants.endPoints.baseUrl + Constants.endPoints.upload,
             data: formData);
-        print(response);
+
         if (response.statusCode == 200) {
-          print(response.data['converted_text']);
           return true;
         }
         return false;
