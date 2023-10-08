@@ -1,3 +1,4 @@
+import 'package:app_hospital/src/modules/recording/presenter/components/button_floating_action_left.dart';
 import 'package:app_hospital/src/modules/recording/presenter/components/button_floating_action_right.dart';
 import 'package:app_hospital/src/modules/recording/presenter/components/button_navigate.dart';
 import 'package:app_hospital/src/modules/recording/presenter/components/button_send_upload_file.dart';
@@ -51,32 +52,42 @@ class _RecordPageState extends State<RecordPage> {
             ],
           ),
           body: Visibility(
-              visible: state is LoadingRecordState,
-              replacement: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const ListTileCustom(
-                        namePatient: 'João da silva',
-                        idPatient: 1,
-                        date: '01/01/2021',
-                      ),
-                      const ButtonNavigate(),
-                      TextListening(state: state),
-                      PlayBackComponents(
-                        cubit: cubit,
-                        state: state,
-                      )
-                    ],
-                  ),
-                  ButtonSendUploadFile(
-                    cubit: cubit,
-                    state: state,
-                  ),
-                ],
-              ),
-              child: const CircularProgressCustom()),
+            visible: state is LoadingRecordState,
+            replacement: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const ListTileCustom(
+                      namePatient: 'João da silva',
+                      idPatient: 1,
+                      date: '01/01/2021',
+                    ),
+                    const ButtonNavigate(),
+                    TextListening(state: state),
+                    PlayBackComponents(
+                      cubit: cubit,
+                      state: state,
+                    )
+                  ],
+                ),
+                ButtonSendUploadFile(
+                  cubit: cubit,
+                  state: state,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ButtonFloatingActionLeft(
+                      cubit: cubit,
+                      state: state,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            child: const CircularProgressCustom(),
+          ),
         );
       },
     );

@@ -10,7 +10,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'My Smart App',
+      title: 'App Hospital',
       themeMode: ThemeMode.light,
       theme: lightTheme,
       darkTheme: darkTheme,

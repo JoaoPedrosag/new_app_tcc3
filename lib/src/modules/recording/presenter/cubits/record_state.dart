@@ -12,8 +12,6 @@ final class AudioProgressState extends RecordState {}
 
 final class AudioStoppedState extends RecordState {}
 
-final class StoppedRecordState extends RecordState {}
-
 final class ClearRecordState extends RecordState {}
 
 final class LoadingRecordState extends RecordState {}
